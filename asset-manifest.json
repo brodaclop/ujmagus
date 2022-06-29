@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/ujmagus/static/css/main.997e21ae.css",
+    "main.js": "/ujmagus/static/js/main.ea80affe.js",
+    "static/js/787.565b7f5d.chunk.js": "/ujmagus/static/js/787.565b7f5d.chunk.js",
+    "index.html": "/ujmagus/index.html",
+    "main.997e21ae.css.map": "/ujmagus/static/css/main.997e21ae.css.map",
+    "main.ea80affe.js.map": "/ujmagus/static/js/main.ea80affe.js.map",
+    "787.565b7f5d.chunk.js.map": "/ujmagus/static/js/787.565b7f5d.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.997e21ae.css",
+    "static/js/main.ea80affe.js"
+  ]
+}
