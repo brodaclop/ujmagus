@@ -1,7 +1,7 @@
 import { FEGYVER_KATEGORIAK, KOZELHARCI_FEGYVEREK } from "./Fegyver";
 import { Kepesseg } from "./Kepesseg";
 
-export type KepzettsegTipus = 'fegyver' | 'fegyverkategoria' | 'tudomanyos' | 'harcmodor';
+export type KepzettsegTipus = 'fegyver' | 'fegyverkategoria' | 'tudomanyos' | 'harcmodor' | 'harci';
 
 interface KepzettsegLink {
     id: string;
@@ -22,7 +22,7 @@ export interface Kepzettseg {
 
 
 const generateFegyverKepzettsegek = (): Array<Kepzettseg> => KOZELHARCI_FEGYVEREK
-    .filter(f => f.alapFegyver === undefined)
+    .filter(f => f.alapFegyver === undefined && !f.pajzstype)
     .map(f => {
         const linked: Array<KepzettsegLink> = f.kategoria ? [{ id: `fegyverkat:${f.kategoria.id}`, strength: 1 }] : [];
         return {
@@ -216,7 +216,19 @@ export const HARCMODOROK: Array<Kepzettseg> = [
             `A kardművész immár a fegyverhasználat fokából adódó bónuszokat is hozzáadhatja a másik fegyveréhez.`,
         ]
     }
+];
 
+export const HARCI_KEPZETTSEGEK: Array<Kepzettseg> = [
+    {
+        id: 'vertviselet',
+        nev: 'Vértviselet',
+        tipus: 'harci',
+        kepesseg: 'allokepesseg',
+        linked: [],
+        kp: [3, 10, 20, 40, 50],
+        leiras: 'Páncélt hatékonyan viselni csak gyakorlással lehet. Minden egyes fok 1-gyel cs0kkenti a páncél MGT-jét',
+        szintleiras: ['', '', '', '', '']
+    },
 ]
 
 export const KEPZETTSEGEK: Array<Kepzettseg> = [

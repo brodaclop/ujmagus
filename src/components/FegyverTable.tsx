@@ -6,7 +6,7 @@ import { Kepesseg } from '../model/Kepesseg';
 import { formatFraction, KEPESSEG_LABELS, SEBZESTIPUS_LABELS } from '../model/Labels';
 import { formatDiceRoll } from '../model/roll';
 
-const formatSebzesTipus = (t: SebzesTipus | Array<SebzesTipus>): string =>
+export const formatSebzesTipus = (t: SebzesTipus | Array<SebzesTipus>): string =>
     (typeof t === 'string' ? [t] : t).sort().map(o => SEBZESTIPUS_LABELS[o ?? 'null']).join('/');
 
 const COLUMNS: Array<ColDef> = [

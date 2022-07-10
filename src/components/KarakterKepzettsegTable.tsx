@@ -1,6 +1,6 @@
 import Tooltip from 'rc-tooltip';
 import React, { useMemo, useRef, useState } from 'react';
-import { Karakter, KarakterKepzettseg } from '../model/Karakter';
+import { Karakter, KarakterKepzettseg } from '../model/karakter/Karakter';
 import { DataTable } from 'primereact/datatable';
 import { Column, ColumnBodyOptions } from 'primereact/column';
 
@@ -24,8 +24,8 @@ export const KarakterKepzettsegTable: React.FC<{ karakter: Karakter, onChange: (
         tipus,
         kepesseg,
         kpToNextFok: { current: karakter.kpToNextFok(id), future: delta?.kpToNextFok(id) },
-        fok: { current: fok, future: delta?.kepzettseg(id).fok },
-        osszKp: { current: osszKp, future: delta?.kepzettseg(id).osszKp },
+        fok: { current: fok, future: delta?.kepzettseg(id)?.fok },
+        osszKp: { current: osszKp, future: delta?.kepzettseg(id)?.osszKp },
         leiras,
         szintleiras
     })), [karakter, delta]);
@@ -71,7 +71,7 @@ export const KarakterKepzettsegTable: React.FC<{ karakter: Karakter, onChange: (
                     <Tooltip trigger={['click', 'hover']} overlay={<div style={{ maxWidth: '20rem' }}>
                         <div style={{ fontWeight: 'bold' }}>{leiras}</div>
                         {szintleiras.map((l: string, i: number) =>
-                            <p style={{ backgroundColor: (i === fok.current - 1) ? 'lightgray' : 'inherit' }}>
+                            <p style={{ backgroundColor: (i <= fok.current - 1) ? 'lightgray' : 'inherit' }}>
                                 <em style={{ marginRight: '1rem' }}>{i + 1}. fok:</em>
                                 <span>{l}</span>
                             </p>)}

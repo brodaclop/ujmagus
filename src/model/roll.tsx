@@ -74,18 +74,18 @@ export const roll = (dice: DiceRoll | string, ijasz?: boolean): DiceRollResult =
 
 export const rollSource = (randomFn: () => number): void => { random = randomFn }
 
-export const parseDiceRoll = (diceString: string = '0'): DiceRoll => {
-    if (!Number.isNaN(Number(diceString))) {
+export const parseDiceRoll = (roll: number | string = '0'): DiceRoll => {
+    if (!Number.isNaN(Number(roll))) {
         return {
             numDice: 0,
             die: 0,
-            plus: Number(diceString),
+            plus: Number(roll),
             tries: 1,
             div: 1,
             kf: false
         };
     }
-    const res = diceString.replace(/\s/g, '').match(PATTERN);
+    const res = String(roll).replace(/\s/g, '').match(PATTERN);
     return {
         numDice: Number(res?.groups?.numDice ?? 1),
         die: Number(res?.groups?.die ?? 0),
@@ -96,7 +96,8 @@ export const parseDiceRoll = (diceString: string = '0'): DiceRoll => {
     }
 }
 
-export const formatDiceRoll = (dice: DiceRoll): string => {
+export const formatDiceRoll = (dice: DiceRoll | number): string => {
+    dice = typeof dice === 'number' ? parseDiceRoll(dice) : dice;
     if (dice.die === 0) {
         return dice.plus ? `${dice.plus}` : '-';
     };
@@ -107,31 +108,28 @@ export const formatResult = (result: DiceRollResult): string => {
     return `${result.value} (${result.details})`
 }
 
-export const sumRolls = (rolls: Array<DiceRoll>): DiceRoll | null => {
-    try {
-        const ret: DiceRoll = parseDiceRoll();
-        rolls.forEach(r => {
-            if (r.tries > 1 || r.kf) {
-                throw new Error('can\'t sum rolls with multiple tries or kf');
-            }
-            if (ret.die !== 0 && r.die !== 0 && r.die !== ret.die) {
-                throw new Error('can\'t sum rolls with different dies');
-            }
-            if (ret.div !== 1 && r.div !== 1 && ret.div !== r.div) {
-                throw new Error('can\'t sum rolls with different divisors');
-            }
-            if (r.die !== 0) {
-                ret.die = r.die;
-                ret.numDice += r.numDice;
-            }
-            if (r.plus !== 0) {
-                ret.plus += r.plus;
-            }
-            if (r.div > 1) {
-                ret.div = r.div;
-            }
-        })
-        return ret;
-    } catch (e) { }
-    return null;
-}
+export const sumRolls = (rolls: Array<DiceRoll>): DiceRoll => {
+    const ret: DiceRoll = parseDiceRoll();
+    rolls.forEach(r => {
+        if (r.tries > 1 || r.kf) {
+            throw new Error('can\'t sum rolls with multiple tries or kf');
+        }
+        if (ret.die !== 0 && r.die !== 0 && r.die !== ret.die) {
+            throw new Error('can\'t sum rolls with different dies');
+        }
+        if (ret.div !== 1 && r.div !== 1 && ret.div !== r.div) {
+            throw new Error('can\'t sum rolls with different divisors');
+        }
+        if (r.die !== 0) {
+            ret.die = r.die;
+            ret.numDice += r.numDice;
+        }
+        if (r.plus !== 0) {
+            ret.plus += r.plus;
+        }
+        if (r.div > 1) {
+            ret.div = r.div;
+        }
+    })
+    return ret;
+};
