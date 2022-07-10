@@ -116,7 +116,7 @@ export class KarakterHarcertek {
 
     public initialise = (): CalculatedHarcertek => {
         return {
-            ...this.kezek(kez => {
+            ...KarakterHarcertek.kezek(kez => {
                 return this.karakter.kezek[kez] ? {
                     ke: [],
                     te: [],
@@ -139,7 +139,7 @@ export class KarakterHarcertek {
         }
     }
 
-    private kezek = <T>(fn: (kez: Kez) => T): Record<Kez, T> => ({
+    public static kezek = <T>(fn: (kez: Kez) => T): Record<Kez, T> => ({
         jobb: fn('jobb'),
         bal: fn('bal')
     });
@@ -149,7 +149,7 @@ export class KarakterHarcertek {
             ...alap,
             value: this.karakter.harcertekek.ve
         });
-        this.kezek(kez => {
+        KarakterHarcertek.kezek(kez => {
             harcertek[kez]?.ke.push({
                 ...alap,
                 value: this.karakter.harcertekek.ke
@@ -179,7 +179,7 @@ export class KarakterHarcertek {
             nev: 'Képesség (GY + ÜGY)',
             value: gy_ugy
         });
-        this.kezek(kez => {
+        KarakterHarcertek.kezek(kez => {
             harcertek[kez]?.ke.push({
                 id: 'kepesseg',
                 nev: 'Képesség (GY + ÜGY)',
@@ -194,7 +194,7 @@ export class KarakterHarcertek {
     }
 
     public applyFegyver = (harcertek: CalculatedHarcertek) => {
-        this.kezek(kez => {
+        KarakterHarcertek.kezek(kez => {
             const fegyver = this.karakter.kezek[kez]?.fegyver;
             if (fegyver) {
                 if (fegyver.mgt) {
@@ -240,7 +240,7 @@ export class KarakterHarcertek {
     }
 
     public removeKepzettseg = (harcertek: CalculatedHarcertek) => {
-        this.kezek(kez => {
+        KarakterHarcertek.kezek(kez => {
             removeCalculationStep(harcertek.kozos.ve, `kepzettseg:${kez}`);
             removeCalculationStep(harcertek[kez]?.te, `kepzettseg`);
             removeCalculationStep(harcertek[kez]?.ke, `kepzettseg`);
@@ -264,7 +264,7 @@ export class KarakterHarcertek {
             }
         }
 
-        this.kezek(kez => {
+        KarakterHarcertek.kezek(kez => {
             const fegyver = this.karakter.kezek[kez]?.fegyver;
             if (fegyver && !fegyver.pajzstype) {
                 const kepzettseg = this.fegyverKepzettseg(fegyver);

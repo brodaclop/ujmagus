@@ -81,11 +81,11 @@ const PancelCard: React.FC<{ harcertek: CalculatedHarcertek, karakter: Karakter,
 }
 
 
-const KezCard: React.FC<{ karakter: Karakter, onChange: (karakter: Karakter) => unknown, harcertek: CalculatedHarcertek, kez: 'jobb' | 'bal' }> = ({ karakter, onChange, harcertek, kez }) => {
+const KezCard: React.FC<{ karakter: Karakter, onChange: (karakter: Karakter) => unknown, harcertek: CalculatedHarcertek, style: object, kez: 'jobb' | 'bal' }> = ({ karakter, onChange, harcertek, kez, style }) => {
     const ures: ItemOption = { nev: 'Üres', guid: null }
     const megFoghato = karakter.megfoghatoFegyverek(kez).map(i => ({ nev: i.fegyver.nev, guid: i.guid }));
     const fogott = megFoghato.find(mf => mf.guid === karakter.kezek[kez]?.guid) ?? ures;
-    return <Card title='Fegyver'>
+    return <Card style={style} title={`${kez[0].toUpperCase()}${kez.substring(1)} kéz`}>
         <Dropdown optionLabel='nev' options={[ures, ...megFoghato]} disabled={megFoghato.length === 0} value={fogott} onChange={params => {
             karakter.megfog(kez, params.value?.guid ?? null);
             onChange(karakter);
@@ -94,9 +94,9 @@ const KezCard: React.FC<{ karakter: Karakter, onChange: (karakter: Karakter) => 
     </Card>
 }
 
-const ExtraCard: React.FC<{ harcertek: CalculatedHarcertek, karakter: Karakter, onChange: (karakter: Karakter) => unknown }> = ({ harcertek, karakter, onChange }) => {
+const ExtraCard: React.FC<{ harcertek: CalculatedHarcertek, karakter: Karakter, onChange: (karakter: Karakter) => unknown; style: object }> = ({ harcertek, karakter, onChange, style }) => {
     const harcmodorok = karakter.harcmodorok();
-    return <Card title='Harcmodor'>
+    return <Card title='Harcmodor' style={style}>
         <Dropdown optionLabel='nev' options={harcmodorok} disabled={harcmodorok.length === 0} value={getHarcmodor(karakter.harcmodorId)} onChange={params => {
             karakter.harcmodorId = params.value?.id ?? null;
             onChange(karakter);
@@ -109,26 +109,76 @@ const ExtraCard: React.FC<{ harcertek: CalculatedHarcertek, karakter: Karakter, 
     </Card >
 }
 
+const FejCard: React.FC<{ karakter: Karakter, onChange: (karakter: Karakter) => unknown; style: object }> = ({ karakter, onChange, style }) => {
+    return <Card style={style}>
+        <table style={{ fontSize: 'large', fontWeight: 'bold' }}>
+            <thead>
+                <tr>
+                    <td />
+                    <td>Akt</td>
+                    <td>Max</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Pszi</td>
+                    <td>12</td>
+                    <td>18</td>
+                </tr>
+                <tr>
+                    <td>Mana</td>
+                    <td>21</td>
+                    <td>24</td>
+                </tr>
+            </tbody>
+        </table>
+    </Card>
+}
+
+const EletCard: React.FC<{ karakter: Karakter, onChange: (karakter: Karakter) => unknown; style: object }> = ({ karakter, onChange, style }) => {
+    return <Card style={style}>
+        <table style={{ fontSize: 'large', fontWeight: 'bold' }}>
+            <thead>
+                <tr>
+                    <td />
+                    <td>Akt</td>
+                    <td>Max</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>ÉP</td>
+                    <td>12</td>
+                    <td>18</td>
+                </tr>
+                <tr>
+                    <td>FP</td>
+                    <td>21</td>
+                    <td>24</td>
+                </tr>
+            </tbody>
+        </table>
+    </Card>
+}
+
 
 interface ItemOption {
     nev: string,
     guid: string | null,
 }
+
+const position = (top: number, left: number): object => ({ position: 'absolute', top: `${top}%`, left: `${left}%`, transform: 'translate(-50%, -50%)' })
 export const KitOut: React.FC<{ karakter: Karakter, onChange: (karakter: Karakter) => unknown }> = ({ karakter, onChange }) => {
 
     const harcertek = karakter.harcertekCalculator().harcertek();
 
-    return <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'row', justifyContent: 'center' }}>
-        <div style={{ flexGrow: 0 }}>
-            <KezCard harcertek={harcertek} karakter={karakter} onChange={onChange} kez='jobb' />
-        </div>
-        <div style={{ flexGrow: 1, position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-            <Csavo style={{ height: '50rem' }} />
-            <PancelCard harcertek={harcertek} style={{ position: 'absolute', top: '30%', left: '50%', transform: 'translate(-50%, -50%)' }} karakter={karakter} onChange={onChange} />
-            <ExtraCard karakter={karakter} onChange={onChange} harcertek={harcertek} />
-        </div>
-        <div style={{ flexGrow: 0 }}>
-            <KezCard harcertek={harcertek} karakter={karakter} onChange={onChange} kez='bal' />
-        </div>
-    </div>
+    return <div style={{ position: 'relative', justifyContent: 'center', display: 'flex' }}>
+        <Csavo style={{ height: '80vh' }} />
+        <FejCard karakter={karakter} style={position(10, 50)} onChange={onChange} />
+        <EletCard karakter={karakter} style={position(70, 50)} onChange={onChange} />
+        <KezCard harcertek={harcertek} style={position(50, 35)} karakter={karakter} onChange={onChange} kez='jobb' />
+        <KezCard harcertek={harcertek} style={position(50, 65)} karakter={karakter} onChange={onChange} kez='bal' />
+        <PancelCard harcertek={harcertek} style={position(35, 50)} karakter={karakter} onChange={onChange} />
+        <ExtraCard karakter={karakter} style={position(100, 50)} onChange={onChange} harcertek={harcertek} />
+    </div>;
 }

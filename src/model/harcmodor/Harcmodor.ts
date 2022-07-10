@@ -1,3 +1,4 @@
+import { _ } from "ag-grid-community";
 import { CalculationStep, removeAllCalculationSteps } from "../Calculation";
 import { InventoryKozelharcFegyver, Karakter, Kez } from "../karakter/Karakter";
 import { CalculatedHarcertek, KarakterHarcertek } from "../karakter/KarakterHarcertek";
@@ -93,6 +94,29 @@ export const PajzsHarcmodor: Harcmodor = {
     }
 }
 
-export const HARCMODOROK: Array<Harcmodor> = [PajzsHarcmodor];
+export const KetkezesFegyverHarcmodor: Harcmodor = {
+    id: 'harcmodor:ketkezes',
+    nev: getKepzettseg('harcmodor:ketkezes')?.nev ?? '',
+    selectable: karakter => {
+        const vanKetkezes = KarakterHarcertek.kezek(kez => karakter.kezek[kez]?.fegyver?.kez === 2);
+        return vanKetkezes.bal || vanKetkezes.jobb;
+    },
+    harcertekCalculation: (karakterHarcertek, harcertek) => {
+        const { bal, jobb } = karakterHarcertek.karakter.kezek;
+        const kepzettseg = karakterHarcertek.karakter.kepzettseg('harcmodor:ketkezes');
+        if (kepzettseg) {
+            const fok = kepzettseg.fok ?? 0;
+            for (let i = 0; i < fok; i++) {
+                harcertek.extra.push({
+                    id: 'harcmodor:ketkezes',
+                    nev: kepzettseg.kepzettseg.nev,
+                    description: kepzettseg.kepzettseg.szintleiras[i]
+                });
+            }
+        }
+    }
+}
+
+export const HARCMODOROK: Array<Harcmodor> = [PajzsHarcmodor, KetkezesFegyverHarcmodor];
 
 export const getHarcmodor = (id: string | null): Harcmodor | null => HARCMODOROK.find(hm => hm.id === id) ?? null;

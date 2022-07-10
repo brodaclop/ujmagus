@@ -183,7 +183,7 @@ export const HARCMODOROK: Array<Kepzettseg> = [
         ugyanakkor avatott forgatójuk jópár trükköt elsajátíthat, amelyekkel ez ellensúlyozható, sőt helyenként előnnyé
         kovácsolható. Minden fok egy újabb manőverrel gazdagítja a karakter trükktárát.`,
         szintleiras: [
-            `A karakter egy ellenfet tud távol tartani magától; amennyiben az mégis közelíteni próbál,
+            `A karakter egy ellenfelet tud távol tartani magától; amennyiben az mégis közelíteni próbál,
             egy soron kívüli támadás intézhető ellene. A manőver nem használható több ellenfél ellen, és addig nem
             ismételhető meg, amíg az ellenfél valamilyen módon ismét nem kerül távolabb.`,
             `A fegyvert rövidebbre fogva kisebb a karakter hátrányt szenved el Belharc ellen (mintha egykezes hosszú fegyver

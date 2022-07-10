@@ -62,6 +62,12 @@ export class Karakter {
         guid: v4(),
     },
     {
+        tipus: 'kozelharcfegyver',
+        fegyver: KOZELHARCI_FEGYVEREK.find(f => f.pajzstype === 'nagy') as KozelharcFegyver,
+        guid: v4(),
+    },
+
+    {
         tipus: 'pancel',
         guid: v4(),
         pancel: {
